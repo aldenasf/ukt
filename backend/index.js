@@ -74,6 +74,24 @@ app.delete("/api/peminjaman/:id", async (req, res) => {
     }
 });
 
+app.post("/api/alat", async (req, res) => {
+    try {
+        const { id_kategori, nama_alat, kondisi, stok, lokasi } = req.body;
+        const query = `INSERT INTO alat (id_kategori, nama_alat, kondisi, stok, lokasi) 
+        VALUES ($1, $2, $3, $4, $5)`;
+        const result = await pool.query(query, [
+            id_kategori,
+            nama_alat,
+            kondisi,
+            stok,
+            lokasi,
+        ]);
+        return res.json(result);
+    } catch (error) {
+        return res.status(500).json({ error });
+    }
+});
+
 app.listen(process.env.PORT, () => {
     try {
         console.log(`Server running in http://localhost:${process.env.PORT}/`);
