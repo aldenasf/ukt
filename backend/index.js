@@ -8,8 +8,13 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
-    const result = pool.query("SELECT * FROM peminjaman;");
-    res.send(result);
+    res.send("Hello world");
+});
+
+app.get("/api/alat", async (req, res) => {
+    const query = `SELECT * FROM alat;`;
+    const result = await pool.query(query);
+    return res.json(result.rows);
 });
 
 app.listen(process.env.PORT, () => {
