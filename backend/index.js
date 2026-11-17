@@ -65,6 +65,18 @@ app.delete("/api/kategori/:id", async (req, res) => {
     }
 });
 
+app.delete("/api/peminjaman/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        console.log(id);
+        const query = `DELETE FROM peminjaman WHERE id_peminjaman = ${id}`;
+        const result = await pool.query(query);
+        return res.json(result);
+    } catch (error) {
+        return res.status(500).json({ error });
+    }
+});
+
 app.listen(process.env.PORT, () => {
     try {
         console.log(`Server running in http://localhost:${process.env.PORT}/`);
