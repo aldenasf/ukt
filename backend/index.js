@@ -46,7 +46,10 @@ app.delete("/api/alat/:id", async (req, res) => {
         const { id } = req.params;
         const query = `DELETE FROM alat WHERE id_alat = $1`;
         const result = await pool.query(query, [id]);
-        return res.json(result);
+        return res.json({
+            message: "Data berhasil dihapus",
+            data: result.rows[0],
+        });
     } catch (error) {
         return res.status(500).json({ error });
     }
@@ -57,7 +60,10 @@ app.delete("/api/kategori/:id", async (req, res) => {
         const { id } = req.params;
         const query = `DELETE FROM kategori_alat WHERE id_kategori = $1`;
         const result = await pool.query(query, [id]);
-        return res.json(result);
+        return res.json({
+            message: "Data berhasil dihapus",
+            data: result.rows[0],
+        });
     } catch (error) {
         return res.status(500).json({ error });
     }
@@ -68,7 +74,10 @@ app.delete("/api/peminjaman/:id", async (req, res) => {
         const { id } = req.params;
         const query = `DELETE FROM peminjaman WHERE id_peminjaman = $1`;
         const result = await pool.query(query, [id]);
-        return res.json(result);
+        return res.json({
+            message: "Data berhasil dihapus",
+            data: result.rows[0],
+        });
     } catch (error) {
         return res.status(500).json({ error });
     }
@@ -86,7 +95,10 @@ app.post("/api/alat", async (req, res) => {
             stok,
             lokasi,
         ]);
-        return res.json(result);
+        return res.status(201).json({
+            message: "Data berhasil ditambahkan",
+            data: result.rows[0],
+        });
     } catch (error) {
         return res.status(500).json({ error });
     }
@@ -98,7 +110,10 @@ app.post("/api/kategori", async (req, res) => {
         const query = `INSERT INTO kategori_alat (nama_kategori, deskripsi) 
         VALUES ($1, $2)`;
         const result = await pool.query(query, [nama_kategori, deskripsi]);
-        return res.json(result);
+        return res.status(201).json({
+            message: "Data berhasil ditambahkan",
+            data: result.rows[0],
+        });
     } catch (error) {
         return res.status(500).json({ error });
     }
@@ -124,7 +139,10 @@ app.post("/api/peminjaman", async (req, res) => {
             jumlah,
             status,
         ]);
-        return res.json(result);
+        return res.status(201).json({
+            message: "Data berhasil ditambahkan",
+            data: result.rows[0],
+        });
     } catch (error) {
         return res.status(500).json({ error });
     }
