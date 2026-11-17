@@ -1,3 +1,4 @@
+-- Active: 1791856799883@@127.0.0.1@5432@ukt
 -- Hapus tabel dan tipe jika sudah ada (untuk mencegah error saat import ulang)
 DROP TABLE IF EXISTS peminjaman;
 DROP TABLE IF EXISTS alat;
