@@ -44,9 +44,8 @@ app.get("/api/peminjaman", async (req, res) => {
 app.delete("/api/alat/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        console.log(id);
-        const query = `DELETE FROM alat WHERE id_alat = ${id}`;
-        const result = await pool.query(query);
+        const query = `DELETE FROM alat WHERE id_alat = $1`;
+        const result = await pool.query(query, [id]);
         return res.json(result);
     } catch (error) {
         return res.status(500).json({ error });
@@ -56,9 +55,8 @@ app.delete("/api/alat/:id", async (req, res) => {
 app.delete("/api/kategori/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        console.log(id);
-        const query = `DELETE FROM kategori_alat WHERE id_kategori = ${id}`;
-        const result = await pool.query(query);
+        const query = `DELETE FROM kategori_alat WHERE id_kategori = $1`;
+        const result = await pool.query(query, [id]);
         return res.json(result);
     } catch (error) {
         return res.status(500).json({ error });
@@ -68,9 +66,8 @@ app.delete("/api/kategori/:id", async (req, res) => {
 app.delete("/api/peminjaman/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        console.log(id);
-        const query = `DELETE FROM peminjaman WHERE id_peminjaman = ${id}`;
-        const result = await pool.query(query);
+        const query = `DELETE FROM peminjaman WHERE id_peminjaman = $1`;
+        const result = await pool.query(query, [id]);
         return res.json(result);
     } catch (error) {
         return res.status(500).json({ error });
