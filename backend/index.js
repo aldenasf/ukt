@@ -15,11 +15,16 @@ app.get("/api/alat", async (req, res) => {
     try {
         const query = `SELECT * FROM alat;`;
         const result = await pool.query(query);
-        return res.json(result.rows);
+        return res.json({
+            success: true,
+            message: "Data berhasil diambil.",
+            data: result.rows,
+        });
     } catch (error) {
-        return res
-            .status(500)
-            .json({ message: error.message || "Terjadi kesalahan server" });
+        return res.status(500).json({
+            success: false,
+            message: error.message || "Terjadi kesalahan server",
+        });
     }
 });
 
@@ -27,11 +32,16 @@ app.get("/api/kategori", async (req, res) => {
     try {
         const query = `SELECT * FROM kategori_alat;`;
         const result = await pool.query(query);
-        return res.json(result.rows);
+        return res.json({
+            success: true,
+            message: "Data berhasil diambil.",
+            data: result.rows,
+        });
     } catch (error) {
-        return res
-            .status(500)
-            .json({ message: error.message || "Terjadi kesalahan server" });
+        return res.status(500).json({
+            success: false,
+            message: error.message || "Terjadi kesalahan server",
+        });
     }
 });
 
@@ -39,11 +49,16 @@ app.get("/api/peminjaman", async (req, res) => {
     try {
         const query = `SELECT * FROM peminjaman;`;
         const result = await pool.query(query);
-        return res.json(result.rows);
+        return res.json({
+            success: true,
+            message: "Data berhasil diambil.",
+            data: result.rows,
+        });
     } catch (error) {
-        return res
-            .status(500)
-            .json({ message: error.message || "Terjadi kesalahan server" });
+        return res.status(500).json({
+            success: false,
+            message: error.message || "Terjadi kesalahan server",
+        });
     }
 });
 
@@ -54,17 +69,21 @@ app.delete("/api/alat/:id", async (req, res) => {
         const result = await pool.query(query, [id]);
 
         if (result.rowCount === 0) {
-            return res.status(404).json({ message: "Data tidak ditemukan" });
+            return res
+                .status(404)
+                .json({ success: false, message: "Data tidak ditemukan" });
         }
 
         return res.json({
+            success: true,
             message: "Data berhasil dihapus",
             data: result.rows[0],
         });
     } catch (error) {
-        return res
-            .status(500)
-            .json({ message: error.message || "Terjadi kesalahan server" });
+        return res.status(500).json({
+            success: false,
+            message: error.message || "Terjadi kesalahan server",
+        });
     }
 });
 
@@ -75,17 +94,21 @@ app.delete("/api/kategori/:id", async (req, res) => {
         const result = await pool.query(query, [id]);
 
         if (result.rowCount === 0) {
-            return res.status(404).json({ message: "Data tidak ditemukan" });
+            return res
+                .status(404)
+                .json({ success: false, message: "Data tidak ditemukan" });
         }
 
         return res.json({
+            success: true,
             message: "Data berhasil dihapus",
             data: result.rows[0],
         });
     } catch (error) {
-        return res
-            .status(500)
-            .json({ message: error.message || "Terjadi kesalahan server" });
+        return res.status(500).json({
+            success: false,
+            message: error.message || "Terjadi kesalahan server",
+        });
     }
 });
 
@@ -96,17 +119,21 @@ app.delete("/api/peminjaman/:id", async (req, res) => {
         const result = await pool.query(query, [id]);
 
         if (result.rowCount === 0) {
-            return res.status(404).json({ message: "Data tidak ditemukan" });
+            return res
+                .status(404)
+                .json({ success: false, message: "Data tidak ditemukan" });
         }
 
         return res.json({
+            success: true,
             message: "Data berhasil dihapus",
             data: result.rows[0],
         });
     } catch (error) {
-        return res
-            .status(500)
-            .json({ message: error.message || "Terjadi kesalahan server" });
+        return res.status(500).json({
+            success: false,
+            message: error.message || "Terjadi kesalahan server",
+        });
     }
 });
 
@@ -123,13 +150,15 @@ app.post("/api/alat", async (req, res) => {
             lokasi,
         ]);
         return res.status(201).json({
+            success: true,
             message: "Data berhasil ditambahkan",
             data: result.rows[0],
         });
     } catch (error) {
-        return res
-            .status(500)
-            .json({ message: error.message || "Terjadi kesalahan server" });
+        return res.status(500).json({
+            success: false,
+            message: error.message || "Terjadi kesalahan server",
+        });
     }
 });
 
@@ -140,13 +169,15 @@ app.post("/api/kategori", async (req, res) => {
         VALUES ($1, $2) RETURNING *;`;
         const result = await pool.query(query, [nama_kategori, deskripsi]);
         return res.status(201).json({
+            success: true,
             message: "Data berhasil ditambahkan",
             data: result.rows[0],
         });
     } catch (error) {
-        return res
-            .status(500)
-            .json({ message: error.message || "Terjadi kesalahan server" });
+        return res.status(500).json({
+            success: false,
+            message: error.message || "Terjadi kesalahan server",
+        });
     }
 });
 
@@ -171,27 +202,19 @@ app.post("/api/peminjaman", async (req, res) => {
             status,
         ]);
 
-        if (result.rowCount === 0) {
-            return res.status(404).json({ message: "Data tidak ditemukan" });
-        }
-
         return res.status(201).json({
+            success: true,
             message: "Data berhasil ditambahkan",
             data: result.rows[0],
         });
     } catch (error) {
-        return res
-            .status(500)
-            .json({ message: error.message || "Terjadi kesalahan server" });
+        return res.status(500).json({
+            success: false,
+            message: error.message || "Terjadi kesalahan server",
+        });
     }
 });
 
 app.listen(process.env.PORT, () => {
-    try {
-        console.log(`Server running in http://localhost:${process.env.PORT}/`);
-    } catch (error) {
-        return res
-            .status(500)
-            .json({ message: error.message || "Terjadi kesalahan server" });
-    }
+    console.log(`Server running on http://localhost:${process.env.PORT}/`);
 });
