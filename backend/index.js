@@ -52,6 +52,11 @@ app.delete("/api/alat/:id", async (req, res) => {
         const { id } = req.params;
         const query = `DELETE FROM alat WHERE id_alat = $1 RETURNING *;`;
         const result = await pool.query(query, [id]);
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ message: "Data tidak ditemukan" });
+        }
+
         return res.json({
             message: "Data berhasil dihapus",
             data: result.rows[0],
@@ -68,6 +73,11 @@ app.delete("/api/kategori/:id", async (req, res) => {
         const { id } = req.params;
         const query = `DELETE FROM kategori_alat WHERE id_kategori = $1 RETURNING *;`;
         const result = await pool.query(query, [id]);
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ message: "Data tidak ditemukan" });
+        }
+
         return res.json({
             message: "Data berhasil dihapus",
             data: result.rows[0],
@@ -84,6 +94,11 @@ app.delete("/api/peminjaman/:id", async (req, res) => {
         const { id } = req.params;
         const query = `DELETE FROM peminjaman WHERE id_peminjaman = $1 RETURNING *;`;
         const result = await pool.query(query, [id]);
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ message: "Data tidak ditemukan" });
+        }
+
         return res.json({
             message: "Data berhasil dihapus",
             data: result.rows[0],
