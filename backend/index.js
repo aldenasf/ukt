@@ -92,6 +92,18 @@ app.post("/api/alat", async (req, res) => {
     }
 });
 
+app.post("/api/kategori", async (req, res) => {
+    try {
+        const { nama_kategori, deskripsi } = req.body;
+        const query = `INSERT INTO kategori_alat (nama_kategori, deskripsi) 
+        VALUES ($1, $2)`;
+        const result = await pool.query(query, [nama_kategori, deskripsi]);
+        return res.json(result);
+    } catch (error) {
+        return res.status(500).json({ error });
+    }
+});
+
 app.listen(process.env.PORT, () => {
     try {
         console.log(`Server running in http://localhost:${process.env.PORT}/`);
