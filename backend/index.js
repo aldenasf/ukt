@@ -17,7 +17,9 @@ app.get("/api/alat", async (req, res) => {
         const result = await pool.query(query);
         return res.json(result.rows);
     } catch (error) {
-        return res.status(500).json({ error });
+        return res
+            .status(500)
+            .json({ message: error.message || "Terjadi kesalahan server" });
     }
 });
 
@@ -27,7 +29,9 @@ app.get("/api/kategori", async (req, res) => {
         const result = await pool.query(query);
         return res.json(result.rows);
     } catch (error) {
-        return res.status(500).json({ error });
+        return res
+            .status(500)
+            .json({ message: error.message || "Terjadi kesalahan server" });
     }
 });
 
@@ -37,7 +41,9 @@ app.get("/api/peminjaman", async (req, res) => {
         const result = await pool.query(query);
         return res.json(result.rows);
     } catch (error) {
-        return res.status(500).json({ error });
+        return res
+            .status(500)
+            .json({ message: error.message || "Terjadi kesalahan server" });
     }
 });
 
@@ -51,7 +57,9 @@ app.delete("/api/alat/:id", async (req, res) => {
             data: result.rows[0],
         });
     } catch (error) {
-        return res.status(500).json({ error });
+        return res
+            .status(500)
+            .json({ message: error.message || "Terjadi kesalahan server" });
     }
 });
 
@@ -65,7 +73,9 @@ app.delete("/api/kategori/:id", async (req, res) => {
             data: result.rows[0],
         });
     } catch (error) {
-        return res.status(500).json({ error });
+        return res
+            .status(500)
+            .json({ message: error.message || "Terjadi kesalahan server" });
     }
 });
 
@@ -79,7 +89,9 @@ app.delete("/api/peminjaman/:id", async (req, res) => {
             data: result.rows[0],
         });
     } catch (error) {
-        return res.status(500).json({ error });
+        return res
+            .status(500)
+            .json({ message: error.message || "Terjadi kesalahan server" });
     }
 });
 
@@ -100,7 +112,9 @@ app.post("/api/alat", async (req, res) => {
             data: result.rows[0],
         });
     } catch (error) {
-        return res.status(500).json({ error });
+        return res
+            .status(500)
+            .json({ message: error.message || "Terjadi kesalahan server" });
     }
 });
 
@@ -115,7 +129,9 @@ app.post("/api/kategori", async (req, res) => {
             data: result.rows[0],
         });
     } catch (error) {
-        return res.status(500).json({ error });
+        return res
+            .status(500)
+            .json({ message: error.message || "Terjadi kesalahan server" });
     }
 });
 
@@ -144,7 +160,9 @@ app.post("/api/peminjaman", async (req, res) => {
             data: result.rows[0],
         });
     } catch (error) {
-        return res.status(500).json({ error });
+        return res
+            .status(500)
+            .json({ message: error.message || "Terjadi kesalahan server" });
     }
 });
 
@@ -152,6 +170,8 @@ app.listen(process.env.PORT, () => {
     try {
         console.log(`Server running in http://localhost:${process.env.PORT}/`);
     } catch (error) {
-        return res.status(500).json({ error });
+        return res
+            .status(500)
+            .json({ message: error.message || "Terjadi kesalahan server" });
     }
 });
