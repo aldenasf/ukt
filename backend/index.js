@@ -29,6 +29,14 @@ app.get("/api/peminjaman", async (req, res) => {
     return res.json(result.rows);
 });
 
+app.delete("/api/alat/:id", async (req, res) => {
+    const { id } = req.params;
+    console.log(id);
+    const query = `DELETE FROM alat WHERE id_alat = ${id}`;
+    const result = await pool.query(query);
+    return res.json(result);
+});
+
 app.listen(process.env.PORT, () => {
     console.log(`Server running in http://localhost:${process.env.PORT}/`);
 });
