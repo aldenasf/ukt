@@ -160,7 +160,7 @@ app.post("/api/peminjaman", async (req, res) => {
             jumlah,
             status,
         } = req.body;
-        const query = `INSERT INTO kategori_alat (id_alat, nama_peminjam, kelas, 
+        const query = `INSERT INTO peminjaman (id_alat, nama_peminjam, kelas, 
         tanggal_kembali, jumlah, status) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`;
         const result = await pool.query(query, [
             id_alat,
@@ -170,6 +170,11 @@ app.post("/api/peminjaman", async (req, res) => {
             jumlah,
             status,
         ]);
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ message: "Data tidak ditemukan" });
+        }
+
         return res.status(201).json({
             message: "Data berhasil ditambahkan",
             data: result.rows[0],
