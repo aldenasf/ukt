@@ -12,31 +12,51 @@ app.get("/", (req, res) => {
 });
 
 app.get("/api/alat", async (req, res) => {
-    const query = `SELECT * FROM alat;`;
-    const result = await pool.query(query);
-    return res.json(result.rows);
+    try {
+        const query = `SELECT * FROM alat;`;
+        const result = await pool.query(query);
+        return res.json(result.rows);
+    } catch (error) {
+        return res.status(500).json({ error });
+    }
 });
 
 app.get("/api/kategori", async (req, res) => {
-    const query = `SELECT * FROM kategori_alat;`;
-    const result = await pool.query(query);
-    return res.json(result.rows);
+    try {
+        const query = `SELECT * FROM kategori_alat;`;
+        const result = await pool.query(query);
+        return res.json(result.rows);
+    } catch (error) {
+        return res.status(500).json({ error });
+    }
 });
 
 app.get("/api/peminjaman", async (req, res) => {
-    const query = `SELECT * FROM peminjaman;`;
-    const result = await pool.query(query);
-    return res.json(result.rows);
+    try {
+        const query = `SELECT * FROM peminjaman;`;
+        const result = await pool.query(query);
+        return res.json(result.rows);
+    } catch (error) {
+        return res.status(500).json({ error });
+    }
 });
 
 app.delete("/api/alat/:id", async (req, res) => {
-    const { id } = req.params;
-    console.log(id);
-    const query = `DELETE FROM alat WHERE id_alat = ${id}`;
-    const result = await pool.query(query);
-    return res.json(result);
+    try {
+        const { id } = req.params;
+        console.log(id);
+        const query = `DELETE FROM alat WHERE id_alat = ${id}`;
+        const result = await pool.query(query);
+        return res.json(result);
+    } catch (error) {
+        return res.status(500).json({ error });
+    }
 });
 
 app.listen(process.env.PORT, () => {
-    console.log(`Server running in http://localhost:${process.env.PORT}/`);
+    try {
+        console.log(`Server running in http://localhost:${process.env.PORT}/`);
+    } catch (error) {
+        return res.status(500).json({ error });
+    }
 });
