@@ -104,6 +104,32 @@ app.post("/api/kategori", async (req, res) => {
     }
 });
 
+app.post("/api/peminjaman", async (req, res) => {
+    try {
+        const {
+            id_alat,
+            nama_peminjam,
+            kelas,
+            tanggal_kembali,
+            jumlah,
+            status,
+        } = req.body;
+        const query = `INSERT INTO kategori_alat (id_alat, nama_peminjam, kelas, tanggal_kembali, jumlah, status) 
+        VALUES ($1, $2, $3, $4, $5, $6)`;
+        const result = await pool.query(query, [
+            id_alat,
+            nama_peminjam,
+            kelas,
+            tanggal_kembali,
+            jumlah,
+            status,
+        ]);
+        return res.json(result);
+    } catch (error) {
+        return res.status(500).json({ error });
+    }
+});
+
 app.listen(process.env.PORT, () => {
     try {
         console.log(`Server running in http://localhost:${process.env.PORT}/`);
