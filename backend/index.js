@@ -50,7 +50,7 @@ app.get("/api/peminjaman", async (req, res) => {
 app.delete("/api/alat/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const query = `DELETE FROM alat WHERE id_alat = $1`;
+        const query = `DELETE FROM alat WHERE id_alat = $1 RETURNING *;`;
         const result = await pool.query(query, [id]);
         return res.json({
             message: "Data berhasil dihapus",
@@ -66,7 +66,7 @@ app.delete("/api/alat/:id", async (req, res) => {
 app.delete("/api/kategori/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const query = `DELETE FROM kategori_alat WHERE id_kategori = $1`;
+        const query = `DELETE FROM kategori_alat WHERE id_kategori = $1 RETURNING *;`;
         const result = await pool.query(query, [id]);
         return res.json({
             message: "Data berhasil dihapus",
@@ -82,7 +82,7 @@ app.delete("/api/kategori/:id", async (req, res) => {
 app.delete("/api/peminjaman/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const query = `DELETE FROM peminjaman WHERE id_peminjaman = $1`;
+        const query = `DELETE FROM peminjaman WHERE id_peminjaman = $1 RETURNING *;`;
         const result = await pool.query(query, [id]);
         return res.json({
             message: "Data berhasil dihapus",
@@ -99,7 +99,7 @@ app.post("/api/alat", async (req, res) => {
     try {
         const { id_kategori, nama_alat, kondisi, stok, lokasi } = req.body;
         const query = `INSERT INTO alat (id_kategori, nama_alat, kondisi, stok, lokasi) 
-        VALUES ($1, $2, $3, $4, $5)`;
+        VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
         const result = await pool.query(query, [
             id_kategori,
             nama_alat,
@@ -122,7 +122,7 @@ app.post("/api/kategori", async (req, res) => {
     try {
         const { nama_kategori, deskripsi } = req.body;
         const query = `INSERT INTO kategori_alat (nama_kategori, deskripsi) 
-        VALUES ($1, $2)`;
+        VALUES ($1, $2) RETURNING *;`;
         const result = await pool.query(query, [nama_kategori, deskripsi]);
         return res.status(201).json({
             message: "Data berhasil ditambahkan",
@@ -145,8 +145,8 @@ app.post("/api/peminjaman", async (req, res) => {
             jumlah,
             status,
         } = req.body;
-        const query = `INSERT INTO kategori_alat (id_alat, nama_peminjam, kelas, tanggal_kembali, jumlah, status) 
-        VALUES ($1, $2, $3, $4, $5, $6)`;
+        const query = `INSERT INTO kategori_alat (id_alat, nama_peminjam, kelas, 
+        tanggal_kembali, jumlah, status) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`;
         const result = await pool.query(query, [
             id_alat,
             nama_peminjam,
