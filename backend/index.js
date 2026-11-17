@@ -23,6 +23,12 @@ app.get("/api/kategori", async (req, res) => {
     return res.json(result.rows);
 });
 
+app.get("/api/peminjaman", async (req, res) => {
+    const query = `SELECT * FROM peminjaman;`;
+    const result = await pool.query(query);
+    return res.json(result.rows);
+});
+
 app.listen(process.env.PORT, () => {
     console.log(`Server running in http://localhost:${process.env.PORT}/`);
 });
