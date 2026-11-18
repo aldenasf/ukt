@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     closeBtn.addEventListener("click", () => modal.close());
     cancelBtn.addEventListener("click", () => modal.close());
 
-    modal.addEventListener("click", (event) => {
+    modal.addEventListener("mousedown", (event) => {
         if (event.target === modal) {
             modal.close();
         }
