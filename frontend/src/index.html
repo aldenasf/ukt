@@ -9,7 +9,7 @@
     <script src="js/app.js"></script>
 </head>
 
-<body>
+<body class="h-screen flex flex-col">
     <header>
         <nav class="flex flex-row bg-blue-600 px-4 justify-between">
             <div class="flex justify-center items-center">
@@ -25,6 +25,16 @@
             </div>
         </nav>
     </header>
+    <main class="flex items-center justify-center flex-1">
+        <div class="flex flex-col justify-center gap-4">
+            <a class="bg-blue-400 text-center font-bold hover:bg-blue-500 transition-colors duration-150 p-8 rounded-xl text-xl text-white"
+                href="peminjaman.html">Peminjaman</a>
+            <a class="bg-blue-400 text-center font-bold hover:bg-blue-500 transition-colors duration-150 p-8 rounded-xl text-xl text-white"
+                href="alat.html">Alat</a>
+            <a class="bg-blue-400 text-center font-bold hover:bg-blue-500 transition-colors duration-150 p-8 rounded-xl text-xl text-white"
+                href="kategori.html">Kategori</a>
+        </div>
+    </main>
 </body>
 
 </html>
