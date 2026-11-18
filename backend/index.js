@@ -295,6 +295,60 @@ app.patch("/api/kategori/:id", async (req, res) => {
     }
 });
 
+app.patch("/api/peminjaman/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const {
+            id_alat,
+            nama_peminjam,
+            kelas,
+            tanggal_kembali,
+            jumlah,
+            status,
+        } = req.body;
+
+        const query = `
+            UPDATE peminjaman
+            SET
+                id_alat = COALESCE($2, id_alat),
+                nama_peminjam = COALESCE($3, nama_peminjam),
+                kelas = COALESCE($4, kelas),
+                tanggal_kembali = COALESCE($5, tanggal_kembali),
+                jumlah = COALESCE($6, jumlah),
+                status = COALESCE($7, status)
+            WHERE id_peminjaman = $1
+            RETURNING *;
+        `;
+
+        const result = await pool.query(query, [
+            id,
+            id_alat,
+            nama_peminjam,
+            kelas,
+            tanggal_kembali,
+            jumlah,
+            status,
+        ]);
+
+        if (result.rowCount === 0) {
+            return res
+                .status(404)
+                .json({ success: false, message: "Data tidak ditemukan." });
+        }
+
+        return res.json({
+            success: true,
+            message: "Data berhasil diubah.",
+            data: result.rows[0],
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message || "Terjadi kesalahan server.",
+        });
+    }
+});
+
 app.listen(process.env.PORT, () => {
     console.log(`Server running on http://localhost:${process.env.PORT}/`);
 });
