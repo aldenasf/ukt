@@ -38,7 +38,7 @@ async function renderAlat(data) {
             <td class="whitespace-nowrap px-6 py-4">${data[i].lokasi}</td>
             <td class="whitespace-nowrap px-6 py-4 flex justify-center gap-2">
                 <button onclick="openEditModal(${data[i].id_alat})" class="bg-yellow-300 hover:bg-yellow-400 transition-colors duration-100 cursor-pointer p-2 rounded-lg">Edit</button>
-                <button class="bg-red-300 hover:bg-red-400 transition-colors duration-100 cursor-pointer p-2 rounded-lg">Hapus</button>
+                <button onclick="openDeleteModal(${data[i].id_alat})" class="bg-red-300 hover:bg-red-400 transition-colors duration-100 cursor-pointer p-2 rounded-lg">Hapus</button>
             </td>
         </tr>
         `;
@@ -75,6 +75,11 @@ function openEditModal(id) {
     modal.showModal();
 }
 
+function openDeleteModal(id) {
+    const modal = document.getElementById("confirmModal");
+    modal.showModal();
+}
+
 async function getKategori() {
     const res = await fetch("http://localhost:5000/api/kategori", {
         method: "GET",
@@ -91,6 +96,19 @@ async function renderKategori(data) {
     data.forEach((i) => {
         kategoriDropdown.innerHTML += `<option value="${i.id_kategori}">${i.nama_kategori}</option>`;
     });
+}
+
+let deleteTargetId = null;
+
+function openDeleteModal(id) {
+    const modal = document.getElementById("deleteModal");
+    const item = currentAlatList.find((i) => i.id_alat == id);
+
+    if (!item) return;
+
+    deleteTargetId = id;
+    document.getElementById("deleteAlatName").innerText = `"${item.nama_alat}"`;
+    modal.showModal();
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -152,5 +170,38 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         form.reset();
         modal.close();
+    });
+
+    const deleteModal = document.getElementById("deleteModal");
+    const closeDeleteBtn = document.getElementById("closeDeleteModalBtn");
+    const cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
+    const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+
+    closeDeleteBtn.addEventListener("click", () => deleteModal.close());
+    cancelDeleteBtn.addEventListener("click", () => deleteModal.close());
+    deleteModal.addEventListener("mousedown", (event) => {
+        if (event.target === deleteModal) {
+            deleteModal.close();
+        }
+    });
+
+    confirmDeleteBtn.addEventListener("click", async () => {
+        if (!deleteTargetId) return;
+
+        const res = await fetch(
+            `http://localhost:5000/api/alat/${deleteTargetId}`,
+            {
+                method: "DELETE",
+            },
+        );
+
+        const result = await res.json();
+        if (result.success) {
+            deleteModal.close();
+            deleteTargetId = null;
+            await refreshAlat();
+        } else {
+            alert(result.message || "Gagal menghapus data.");
+        }
     });
 });
