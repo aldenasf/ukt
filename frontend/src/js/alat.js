@@ -75,11 +75,6 @@ function openEditModal(id) {
     modal.showModal();
 }
 
-function openDeleteModal(id) {
-    const modal = document.getElementById("confirmModal");
-    modal.showModal();
-}
-
 async function getKategori() {
     const res = await fetch("http://localhost:5000/api/kategori", {
         method: "GET",
@@ -167,9 +162,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         } else {
             alert(result.message || "Gagal menyimpan data.");
         }
-
-        form.reset();
-        modal.close();
     });
 
     const deleteModal = document.getElementById("deleteModal");
