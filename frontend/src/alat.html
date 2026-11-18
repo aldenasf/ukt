@@ -32,30 +32,91 @@
                 <h1 class="font-bold text-2xl">Alat</h1>
             </div>
             <div class="flex flex-row">
-                <button id="alat-add"
+                <button id="openAddModalBtn"
                     class="bg-blue-400 py-2 px-4 rounded-lg hover:bg-blue-500 transition-colors duration-100 cursor-pointer">Tambah
                     Alat</button>
             </div>
         </div>
-        <table class="min-w-full divide-y bg-white text-left text-sm divide-gray-200 border border-gray-200">
-            <thead class="font-semibold uppercase tracking-wider">
+
+        <table class="min-w-full bg-white text-left text-sm border border-gray-200">
+            <thead class="font-semibold uppercase">
                 <tr class="bg-blue-400">
-                    <th scope="col" class="px-6 py-2">ID</th>
+                    <th scope="col" class="px-6 py-2 text-center">ID</th>
                     <th scope="col" class="px-6 py-2">Kategori</th>
                     <th scope="col" class="px-6 py-2">Nama Alat</th>
                     <th scope="col" class="px-6 py-2">Kondisi</th>
                     <th scope="col" class="px-6 py-2">Stok</th>
                     <th scope="col" class="px-6 py-2">Lokasi</th>
-                    <th scope="col" class="px-6 py-2">Aksi</th>
+                    <th scope="col" class="px-6 py-2 text-center">Aksi</th>
                 </tr>
             </thead>
-            <tbody id="alat-table">
+            <tbody id="alatTable">
 
             </tbody>
         </table>
+
         <div class="flex flex-row justify-end mt-2 text-sm text-gray-800">
-            <p id="alat-info"></p>
+            <p id="alatInfo"></p>
         </div>
+
+        <dialog id="formModal"
+            class="m-auto w-full max-w-md rounded-xl bg-white p-0 shadow-2xl backdrop:bg-slate-900/60 backdrop:backdrop-blur-xs">
+            <div class="p-6">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-bold text-slate-900" id="modalTitle"></h2>
+                    <button id="closeModalBtn" type="button" aria-label="Close modal"
+                        class="rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600">
+                        ✕
+                    </button>
+                </div>
+
+                <form id="form" class="mt-4 space-y-4">
+                    <input type="hidden" id="idAlat" name="idAlat" />
+                    <div>
+                        <label for="namaAlat" class="block text-sm font-medium text-slate-700">Nama</label>
+                        <input type="text" id="namaAlat" name="namaAlat" required placeholder="Proyektor"
+                            class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 shadow-xs focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" />
+                    </div>
+
+                    <div>
+                        <label for="kategoriAlat" class="block text-sm font-medium text-slate-700">Kategori</label>
+                        <select name="kategoriAlat" id="kategoriAlat"
+                            class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 shadow-xs focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                            <option value="" disabled selected>Pilih Kategori</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="kondisiAlat" class="block text-sm font-medium text-slate-700">Kondisi</label>
+                        <input type="text" id="kondisiAlat" name="kondisiAlat" required placeholder="Baik"
+                            class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 shadow-xs focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" />
+                    </div>
+
+                    <div>
+                        <label for="stokAlat" class="block text-sm font-medium text-slate-700">Stok</label>
+                        <input type="number" id="stokAlat" name="stokAlat" min="0" required placeholder="30"
+                            class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 shadow-xs focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" />
+                    </div>
+
+                    <div>
+                        <label for="lokasiAlat" class="block text-sm font-medium text-slate-700">Lokasi</label>
+                        <input type="text" id="lokasiAlat" name="lokasiAlat" required placeholder="Lemari Jaringan A"
+                            class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 shadow-xs focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" />
+                    </div>
+
+                    <div class="flex justify-end pt-4 gap-2">
+                        <button id="cancelBtn" type="button"
+                            class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 cursor-pointer">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                            class="rounded-lg bg-blue-500 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-600 cursor-pointer">
+                            Simpan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </dialog>
     </main>
 </body>
 
