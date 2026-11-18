@@ -116,13 +116,39 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 
-    form.addEventListener("submit", (event) => {
-        event.preventDefault();
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-        console.log("Form Submitted:", data);
-        alert(`Thanks, ${data.name}! Your message has been sent.`);
+        const id = document.getElementById("idAlat").value;
+        const isEdit = Boolean(id);
+
+        const payload = {
+            id_kategori: document.getElementById("kategoriAlat").value,
+            nama_alat: document.getElementById("namaAlat").value,
+            kondisi: document.getElementById("kondisiAlat").value,
+            stok: Number(document.getElementById("stokAlat").value),
+            lokasi: document.getElementById("lokasiAlat").value,
+        };
+
+        const url = isEdit
+            ? `http://localhost:5000/api/alat/${id}`
+            : `http://localhost:5000/api/alat`;
+        const method = isEdit ? "PATCH" : "POST";
+
+        const res = await fetch(url, {
+            method,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+        });
+
+        const result = await res.json();
+        if (result.success) {
+            modal.close();
+            form.reset();
+            await refreshAlat();
+        } else {
+            alert(result.message || "Gagal menyimpan data.");
+        }
 
         form.reset();
         modal.close();
