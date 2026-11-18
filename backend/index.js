@@ -260,6 +260,41 @@ app.patch("/api/alat/:id", async (req, res) => {
     }
 });
 
+app.patch("/api/kategori/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { nama_kategori, deskripsi } = req.body;
+
+        const query = `
+            UPDATE kategori_alat
+            SET
+                nama_kategori = COALESCE($2, nama_kategori),
+                deskripsi = COALESCE($3, deskripsi)
+            WHERE id_kategori = $1
+            RETURNING *;
+        `;
+
+        const result = await pool.query(query, [id, nama_kategori, deskripsi]);
+
+        if (result.rowCount === 0) {
+            return res
+                .status(404)
+                .json({ success: false, message: "Data tidak ditemukan." });
+        }
+
+        return res.json({
+            success: true,
+            message: "Data berhasil diubah.",
+            data: result.rows[0],
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message || "Terjadi kesalahan server.",
+        });
+    }
+});
+
 app.listen(process.env.PORT, () => {
     console.log(`Server running on http://localhost:${process.env.PORT}/`);
 });
