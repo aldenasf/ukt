@@ -13,7 +13,18 @@ app.get("/", (req, res) => {
 
 app.get("/api/alat", async (req, res) => {
     try {
-        const query = `SELECT * FROM alat;`;
+        const query = `SELECT 
+            alat.id_alat, 
+            alat.id_kategori,
+            kategori_alat.nama_kategori, 
+            alat.nama_alat, 
+            alat.kondisi, 
+            alat.stok, 
+            alat.lokasi 
+        FROM alat, kategori_alat 
+        WHERE alat.id_kategori = kategori_alat.id_kategori
+        ORDER BY id_alat
+        ;`;
         const result = await pool.query(query);
         return res.json({
             success: true,
