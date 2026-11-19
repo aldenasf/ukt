@@ -58,7 +58,20 @@ app.get("/api/kategori", async (req, res) => {
 
 app.get("/api/peminjaman", async (req, res) => {
     try {
-        const query = `SELECT * FROM peminjaman;`;
+        let date_start = req?.body?.date_start || undefined;
+        let date_end = req?.body?.date_end || undefined;
+
+        let date_query = "";
+
+        if (date_start !== undefined && date_end !== undefined) {
+            date_query = `WHERE tanggal_pinjam BETWEEN '${date_start}' AND '${date_end}'`;
+        } else if (date_start !== undefined) {
+            date_query = `WHERE tanggal_pinjam = '${date_start}'`;
+        }
+
+        const query = `SELECT * FROM peminjaman ${date_query};`;
+
+        console.log(query);
         const result = await pool.query(query);
         return res.json({
             success: true,
@@ -198,16 +211,18 @@ app.post("/api/peminjaman", async (req, res) => {
             id_alat,
             nama_peminjam,
             kelas,
+            tanggal_pinjam,
             tanggal_kembali,
             jumlah,
             status,
         } = req.body;
-        const query = `INSERT INTO peminjaman (id_alat, nama_peminjam, kelas, 
-        tanggal_kembali, jumlah, status) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`;
+        const query = `INSERT INTO peminjaman (id_alat, nama_peminjam, kelas, tanggal_pinjam,
+        tanggal_kembali, jumlah, status) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;`;
         const result = await pool.query(query, [
             id_alat,
             nama_peminjam,
             kelas,
+            tanggal_pinjam,
             tanggal_kembali,
             jumlah,
             status,
