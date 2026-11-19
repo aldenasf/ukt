@@ -60,8 +60,12 @@ async function renderPeminjaman(data) {
     table.innerHTML = "";
 
     for (let i = 0; i < data.length; i++) {
-        const itemAlat = currentAlatList.find((a) => a.id_alat == data[i].id_alat);
-        const namaAlat = itemAlat ? itemAlat.nama_alat : `Alat #${data[i].id_alat}`;
+        const itemAlat = currentAlatList.find(
+            (a) => a.id_alat == data[i].id_alat,
+        );
+        const namaAlat = itemAlat
+            ? itemAlat.nama_alat
+            : `Alat #${data[i].id_alat}`;
 
         let statusBadgeClass = "bg-amber-300";
         if (data[i].status === "Dikembalikan") {
@@ -95,6 +99,13 @@ function openAddModal() {
     const modal = document.getElementById("formModal");
     const form = document.getElementById("form");
     const modalTitle = document.getElementById("modalTitle");
+    const tanggalPinjam = document.getElementById("tanggalPinjam");
+
+    tanggalPinjam.setAttribute("value", new Date().toISOString().split("T")[0]);
+
+    console.log(tanggalPinjam);
+    console.log(new Date().toISOString().split("T")[0]);
+    console.log(tanggalPinjam.value);
 
     form.reset();
     document.getElementById("idPeminjaman").value = "";
@@ -117,7 +128,12 @@ function openEditModal(id) {
     document.getElementById("kelas").value = item.kelas;
     document.getElementById("idAlat").value = item.id_alat;
     document.getElementById("jumlah").value = item.jumlah;
-    document.getElementById("tanggalKembali").value = formatDate(item.tanggal_kembali);
+    document.getElementById("tanggalPinjam").value = formatDate(
+        item.tanggal_pinjam,
+    );
+    document.getElementById("tanggalKembali").value = formatDate(
+        item.tanggal_kembali,
+    );
     document.getElementById("status").value = item.status;
 
     modal.showModal();
@@ -130,7 +146,8 @@ function openDeleteModal(id) {
     if (!item) return;
 
     deleteTargetId = id;
-    document.getElementById("deletePeminjamName").innerText = `"${item.nama_peminjam}"`;
+    document.getElementById("deletePeminjamName").innerText =
+        `"${item.nama_peminjam}"`;
     modal.showModal();
 }
 
@@ -164,6 +181,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             id_alat: Number(document.getElementById("idAlat").value),
             nama_peminjam: document.getElementById("namaPeminjam").value,
             kelas: document.getElementById("kelas").value,
+            tanggal_pinjam: document.getElementById("tanggalPinjam").value,
             tanggal_kembali: document.getElementById("tanggalKembali").value,
             jumlah: Number(document.getElementById("jumlah").value),
             status: document.getElementById("status").value,

@@ -41,7 +41,7 @@ app.get("/api/alat", async (req, res) => {
 
 app.get("/api/kategori", async (req, res) => {
     try {
-        const query = `SELECT * FROM kategori_alat;`;
+        const query = `SELECT * FROM kategori_alat ORDER BY id_kategori;`;
         const result = await pool.query(query);
         return res.json({
             success: true,
@@ -69,7 +69,7 @@ app.get("/api/peminjaman", async (req, res) => {
             date_query = `WHERE tanggal_pinjam = '${date_start}'`;
         }
 
-        const query = `SELECT * FROM peminjaman ${date_query};`;
+        const query = `SELECT * FROM peminjaman ORDER BY id_peminjaman ${date_query};`;
 
         console.log(query);
         const result = await pool.query(query);
@@ -328,6 +328,7 @@ app.patch("/api/peminjaman/:id", async (req, res) => {
             id_alat,
             nama_peminjam,
             kelas,
+            tanggal_pinjam,
             tanggal_kembali,
             jumlah,
             status,
@@ -339,9 +340,10 @@ app.patch("/api/peminjaman/:id", async (req, res) => {
                 id_alat = COALESCE($2, id_alat),
                 nama_peminjam = COALESCE($3, nama_peminjam),
                 kelas = COALESCE($4, kelas),
-                tanggal_kembali = COALESCE($5, tanggal_kembali),
-                jumlah = COALESCE($6, jumlah),
-                status = COALESCE($7, status)
+                tanggal_pinjam = COALESCE($5, tanggal_pinjam),
+                tanggal_kembali = COALESCE($6, tanggal_kembali),
+                jumlah = COALESCE($7, jumlah),
+                status = COALESCE($8, status)
             WHERE id_peminjaman = $1
             RETURNING *;
         `;
@@ -351,6 +353,7 @@ app.patch("/api/peminjaman/:id", async (req, res) => {
             id_alat,
             nama_peminjam,
             kelas,
+            tanggal_pinjam,
             tanggal_kembali,
             jumlah,
             status,
