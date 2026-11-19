@@ -58,8 +58,8 @@ app.get("/api/kategori", async (req, res) => {
 
 app.get("/api/peminjaman", async (req, res) => {
     try {
-        let date_start = req?.body?.date_start || undefined;
-        let date_end = req?.body?.date_end || undefined;
+        let date_start = req?.query?.date_start || undefined;
+        let date_end = req?.query?.date_end || undefined;
 
         let date_query = "";
 
@@ -69,7 +69,7 @@ app.get("/api/peminjaman", async (req, res) => {
             date_query = `WHERE tanggal_pinjam = '${date_start}'`;
         }
 
-        const query = `SELECT * FROM peminjaman ORDER BY id_peminjaman ${date_query};`;
+        const query = `SELECT * FROM peminjaman ${date_query} ORDER BY id_peminjaman;`;
 
         console.log(query);
         const result = await pool.query(query);
