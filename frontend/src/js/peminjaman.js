@@ -151,11 +151,123 @@ function openDeleteModal(id) {
     modal.showModal();
 }
 
+function openCetakModal() {
+    const cetakModal = document.getElementById("cetakModal");
+
+    cetakModal.showModal();
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
     refreshPeminjaman();
 
     const openAdd = document.getElementById("openAddModalBtn");
     openAdd.addEventListener("click", openAddModal);
+
+    const cetakModal = document.getElementById("cetakModal");
+    const cetakModalBtn = document.getElementById("openCetakModalBtn");
+    const cancelCetakBtn = document.getElementById("cancelCetakBtn");
+    const closeCetakModalBtn = document.getElementById("closeCetakModalBtn");
+    const formCetakModal = document.getElementById("formCetakModal");
+
+    cetakModalBtn.addEventListener("click", openCetakModal);
+    cancelCetakBtn.addEventListener("click", () => cetakModal.close());
+    closeCetakModalBtn.addEventListener("click", () => cetakModal.close());
+
+    cetakModal.addEventListener("mousedown", (event) => {
+        if (event.target === cetakModal) {
+            cetakModal.close();
+        }
+    });
+
+    formCetakModal.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const dateStart = document.getElementById("dateStart").value;
+        const dateEnd = document.getElementById("dateEnd").value;
+
+        const res = await fetch(
+            `http://localhost:5000/api/peminjaman?date_start=${dateStart}&date_end=${dateEnd}`,
+        );
+        const result = await res.json();
+        const data = result.data || [];
+
+        const tableBody = data
+            .map((item, i) => {
+                const itemAlat = currentAlatList.find(
+                    (a) => a.id_alat == item.id_alat,
+                );
+                const namaAlat = itemAlat
+                    ? itemAlat.nama_alat
+                    : `Alat #${item.id_alat}`;
+
+                return `
+                <tr class="${i % 2 !== 0 ? "bg-gray-200" : ""}">
+                    <td class="whitespace-nowrap px-6 py-4 text-center">${item.id_peminjaman}</td>
+                    <td class="whitespace-nowrap px-6 py-4">${item.nama_peminjam}</td>
+                    <td class="whitespace-nowrap px-6 py-4">${item.kelas}</td>
+                    <td class="whitespace-nowrap px-6 py-4">${namaAlat}</td>
+                    <td class="whitespace-nowrap px-6 py-4">${formatDate(item.tanggal_pinjam)}</td>
+                    <td class="whitespace-nowrap px-6 py-4">${formatDate(item.tanggal_kembali)}</td>
+                    <td class="whitespace-nowrap px-6 py-4">${item.jumlah}</td>
+                    <td class="whitespace-nowrap px-6 py-4">${item.status}</td>
+                </tr>
+                `;
+            })
+            .join("");
+
+        const printWindow = window.open("", "_blank");
+
+        printWindow.document.write(`
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <link rel="stylesheet" href="css/output.css">
+                    <style>
+                        @media print {
+                            body {
+                                -webkit-print-color-adjust: exact;
+                                print-color-adjust: exact;
+                            }
+                        }
+                    </style>
+                </head>
+                <body class="p-8 bg-white">
+                    <div class="mb-6 text-center">
+                        <h1 class="text-2xl font-bold text-gray-900">Laporan Peminjaman Alat</h1>
+                        <p class="text-sm text-gray-500 mt-1">Tanggal: ${dateStart || "Semua"} s/d ${dateEnd || "Semua"}</p>
+                    </div>
+
+                    <table class="min-w-full bg-white text-left text-sm border border-gray-200">
+                        <thead class="font-semibold uppercase">
+                            <tr class="bg-gray-400 text-black">
+                                <th scope="col" class="px-6 py-2 text-center">ID</th>
+                                <th scope="col" class="px-6 py-2">Nama</th>
+                                <th scope="col" class="px-6 py-2">Kelas</th>
+                                <th scope="col" class="px-6 py-2">Alat</th>
+                                <th scope="col" class="px-6 py-2">Tanggal Pinjam</th>
+                                <th scope="col" class="px-6 py-2">Tanggal Kembali</th>
+                                <th scope="col" class="px-6 py-2">Jumlah</th>
+                                <th scope="col" class="px-6 py-2">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${tableBody || `<tr><td colspan="8" class="text-center py-6 text-gray-500">Tidak ada data</td></tr>`}
+                        </tbody>
+                    </table>
+                </body>
+                </html>
+            `);
+        printWindow.document.close();
+
+        cetakModal.close();
+
+        printWindow.onload = () => {
+            printWindow.focus();
+            printWindow.print();
+            printWindow.close();
+        };
+    });
 
     const modal = document.getElementById("formModal");
     const closeBtn = document.getElementById("closeModalBtn");
